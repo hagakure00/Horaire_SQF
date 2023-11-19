@@ -146,6 +146,9 @@ class HoraireModel {
   final String? cpS5j4;
   final String? cpS5j5;
 
+  final String? year;
+  final String? samedi;
+
   HoraireModel({
     this.id,
     this.date,
@@ -292,6 +295,8 @@ class HoraireModel {
     this.cpS5j3,
     this.cpS5j4,
     this.cpS5j5,
+    this.year,
+    this.samedi
 
   });
 
@@ -441,7 +446,9 @@ class HoraireModel {
   cpS5j2 = res["cpS5j2"],
   cpS5j3 = res["cpS5j3"],
   cpS5j4 = res["cpS5j4"],
-  cpS5j5 = res["cpS5j5"];
+  cpS5j5 = res["cpS5j5"],
+  year = res["year"],
+  samedi = res["samedi"];
 
 
 
@@ -592,7 +599,8 @@ class HoraireModel {
       "cpS5j3": cpS5j3,
       "cpS5j4": cpS5j4,
       "cpS5j5": cpS5j5,
-
+      "year": year,
+      "samedi": samedi
     };
 
   }

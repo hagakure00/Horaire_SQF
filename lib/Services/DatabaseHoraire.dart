@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sqflite/sqflite.dart';
@@ -162,8 +163,10 @@ class DBHelperHoraire {
       "cpS5j2" TEXT NOT NULL,
       "cpS5j3" TEXT NOT NULL,
       "cpS5j4" TEXT NOT NULL,
-      "cpS5j5" TEXT NOT NULL
-          )""");
+      "cpS5j5" TEXT NOT NULL,
+      "year" TEXT NOT NULL,
+      "samedi" TEXT NOT NULL
+      )""");
   }
 
   Future<HoraireModel> insertData(HoraireModel horaire) async {
@@ -207,9 +210,15 @@ class DBHelperHoraire {
     io.Directory documentDirectory = await getApplicationDocumentsDirectory();
     String path = join(documentDirectory.path, 'Horaire.db');
     String databasePath = path;
-    print('=======================databasePath :  $databasePath');
+    if (kDebugMode) {
+      print('=======================databasePath :  $databasePath');
+    }
     io.Directory? externalStoragepath = await getExternalStorageDirectory();
-    print("=======================externalStoragepath :  $externalStoragepath");
+    if (kDebugMode) {
+      if (kDebugMode) {
+        print("=======================externalStoragepath :  $externalStoragepath");
+      }
+    }
   }
 
   String dbFilepath = "/data/user/0/com.horaire.horaire/app_flutter/Horaire.db";
@@ -230,7 +239,9 @@ class DBHelperHoraire {
       await folderPathForDbFile.create();
       await dbFile.copy("$folderPathForDbFilePath/Horaire.db");
      } catch (e) {
-       print("========================= error : ${e.toString()}");
+       if (kDebugMode) {
+         print("========================= error : ${e.toString()}");
+       }
      }
   }
 
@@ -254,7 +265,9 @@ class DBHelperHoraire {
       }
       // await savedDbFile.copy(dbFilepath);
     } catch (e) {
-      print("========================= error : ${e.toString()}");
+      if (kDebugMode) {
+        print("========================= error : ${e.toString()}");
+      }
     }
   }
 

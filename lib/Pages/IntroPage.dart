@@ -1,11 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:horaire/Theme/colors.dart';
-
+import 'package:flutter_animate/flutter_animate.dart';
 import 'HomePage.dart';
-
 
 
 
@@ -13,7 +9,7 @@ class IntroPage extends StatefulWidget {
   const IntroPage({Key? key}) : super(key: key);
 
   @override
-  _IntroPageState createState() => _IntroPageState();
+  State<IntroPage> createState() => _IntroPageState();
 }
 
 class _IntroPageState extends State<IntroPage> {
@@ -21,7 +17,7 @@ class _IntroPageState extends State<IntroPage> {
   @override
   void initState() {
     super.initState();
-    Timer(const Duration(seconds: 2), () {
+    Timer(const Duration(seconds: 4), () {
       setState(() {
         Navigator.of(context).push(MaterialPageRoute(builder: (context) => const HomePage()));
       });
@@ -31,23 +27,20 @@ class _IntroPageState extends State<IntroPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body:  Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 150,bottom: 0),
-            child: SizedBox(
-              height:200,
-              child: Image.asset("assets/images/logo.png",fit: BoxFit.cover,),
-            ),
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        decoration: BoxDecoration(color: Theme.of(context).primaryColor),
+        child: Center(
+          child: SizedBox(
+            height:200,
+            width: 200,
+            child: Image.asset("assets/images/logo.png",fit: BoxFit.cover)
+                .animate().fade(begin: 0.1,end: 1,duration: 1000.ms,delay: 600.ms)
+                .slideY(begin: -1,end: 0,duration: 1000.ms,delay: 600.ms) ,
           ),
-          Text("Enregister vos heures de travail",
-              style: GoogleFonts.oswald(textStyle: const TextStyle(color: black,fontSize: 18,letterSpacing: 0.5,height: 1,decoration: TextDecoration.none))),
-          Text("Garder un oeil sur votre modulation",
-              style: GoogleFonts.poppins(textStyle: const TextStyle(color: black,fontSize: 14,height: 2,decoration: TextDecoration.none))),
-          const SizedBox(height: 100),
-          SpinKitRipple(color: Theme.of(context).primaryColor, size: 100.0)
-        ],
-      )
+        ),
+      ).animate().fade(delay: 500.ms)
     );
   }
 }

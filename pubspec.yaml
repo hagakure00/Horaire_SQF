@@ -1,8 +1,8 @@
 name: horaire
 description: horaire project
-publish_to: 'none'
+publish_to: 'mas aurelien'
 
-version: 1.0.0+1
+version: 1.0.0+2
 
 environment:
   sdk: '>=3.1.4 <4.0.0'
@@ -21,13 +21,13 @@ dependencies:
   google_fonts: ^6.1.0
   ionicons: ^0.2.2
   simple_animations: ^5.0.2
-  stacked_themes: ^0.3.12
   date_picker_timeline: ^1.2.5
   flutter_localization: ^0.1.14
   flutter_local_notifications: ^16.1.0
-  shared_preferences: ^2.2.2
   permission_handler: ^11.0.1
   file_picker: ^6.1.1
+  theme_provider: ^0.6.0
+  flutter_animate: ^4.2.0+1
 
 
 dev_dependencies:

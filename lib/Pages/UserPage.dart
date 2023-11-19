@@ -6,9 +6,8 @@ import 'package:horaire/Models/UserModel.dart';
 import 'package:horaire/Pages/HomePage.dart';
 import 'package:horaire/Services/DatabaseHoraire.dart';
 import 'package:horaire/Theme/colors.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:theme_provider/theme_provider.dart';
 import '../Services/DatabaseUser.dart';
-import '../Theme/ThemeSetup.dart';
 
 
 class UserPage extends StatefulWidget {
@@ -16,15 +15,17 @@ class UserPage extends StatefulWidget {
       {Key? key,
       required this.isUpdate,
       required this.pause,
-      required this.contrat})
+      required this.contrat,
+      required this.samedi})
       : super(key: key);
 
   final bool? isUpdate;
   final String? pause;
   final String? contrat;
+  final String? samedi;
 
   @override
-  _UserPageState createState() => _UserPageState();
+  State<UserPage> createState() => _UserPageState();
 }
 
 class _UserPageState extends State<UserPage> {
@@ -32,30 +33,18 @@ class _UserPageState extends State<UserPage> {
   DBHelperUser? dbHelperUser;
   DBHelperHoraire? dbHelperHoraire;
   late Future<List<UserModel>> dataUserList;
-  final StreamController<ThemeData> _streamController = StreamController();
 
   late final contratController = TextEditingController(text: widget.contrat);
   late final pauseController = TextEditingController(text: widget.pause);
 
-  static const String keyTheme = "theme";
-  String? getDataTheme;
-  String? colorThemeValue;
-
+  late bool isSelectedSamedi = (widget.samedi == "1") ? true :false;
+  late String samCheck = (widget.samedi == "1") ? "1" : "0";
 
   @override
   void initState() {
     super.initState();
     dbHelperUser = DBHelperUser();
     dbHelperHoraire = DBHelperHoraire();
-    _streamController.stream.listen((event) async {});
-    getTheme();
-  }
-
-  void getTheme() async {
-    var pref = await SharedPreferences.getInstance();
-    var getTheme = pref.getString(keyTheme);
-    getDataTheme = getTheme;
-    print("user data theme: $getDataTheme");
   }
 
   int _selectedHoraire = 0;
@@ -65,7 +54,6 @@ class _UserPageState extends State<UserPage> {
 
   @override
   Widget build(BuildContext context) {
-    CustomTheme customTheme = CustomTheme.of(context)!;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -115,8 +103,10 @@ class _UserPageState extends State<UserPage> {
                   buildContrat(context),
                   const SizedBox(height: 30),
                   buildPause(context),
-                  const SizedBox(height: 40),
-                  buildThemeColor(customTheme),
+                  const SizedBox(height: 20),
+                  buildSamediCheck(),
+                  const SizedBox(height: 20),
+                  buildThemeColor(),
                   const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -147,17 +137,32 @@ class _UserPageState extends State<UserPage> {
     );
   }
 
-  Widget buildThemeColor(customTheme){
+  Widget buildSamediCheck() {
+    return Row(
+      children: [
+        Text("Calculer les Samedi séparement :", style: GoogleFonts.poppins(textStyle: const TextStyle(color: black, fontSize: 14, height: 1, decoration: TextDecoration.none))),
+        SizedBox(width: MediaQuery.of(context).size.width -350),
+        Switch(
+            activeColor: Theme.of(context).primaryColor,
+            value: isSelectedSamedi,
+            onChanged: (e) {
+              setState(() {
+                isSelectedSamedi = e;
+                samCheck = isSelectedSamedi == true ? "1" : "0";
+              });
+            }
+        )
+      ],
+    );
+  }
+
+  Widget buildThemeColor(){
     return Row(
       children: [
         Text("Changer le Theme :    ", style: GoogleFonts.poppins(textStyle: const TextStyle(color: black, fontSize: 14, height: 1, decoration: TextDecoration.none))),
         const SizedBox(height: 8),
         GestureDetector(
-          onTap: () {setState(() {
-            customTheme.streamController.add(primaryTheme);
-            _streamController.add(primaryTheme);
-            colorThemeValue = "primaryTheme";
-          });},
+          onTap: () {ThemeProvider.controllerOf(context).setTheme("blue");ThemeProvider.controllerOf(context).saveThemeToDisk();},
           child: Container(
             margin: const EdgeInsets.only(bottom: 10,right: 10,left: 10),
             width: 20,
@@ -166,11 +171,7 @@ class _UserPageState extends State<UserPage> {
           ),
         ),
         GestureDetector(
-          onTap: () {setState(() {
-            customTheme.streamController.add(orangeTheme);
-            _streamController.add(orangeTheme);
-            colorThemeValue = "orangeTheme";
-          });},
+          onTap: () {ThemeProvider.controllerOf(context).setTheme("orange");ThemeProvider.controllerOf(context).saveThemeToDisk();},
           child: Container(
             margin: const EdgeInsets.only(bottom: 10,right: 10,left: 10),
             width: 20,
@@ -179,11 +180,7 @@ class _UserPageState extends State<UserPage> {
           ),
         ),
         GestureDetector(
-          onTap: () {setState(() {
-            customTheme.streamController.add(purpleTheme);
-            _streamController.add(purpleTheme);
-            colorThemeValue = "purpleTheme";
-          });},
+          onTap: () {ThemeProvider.controllerOf(context).setTheme("purple");ThemeProvider.controllerOf(context).saveThemeToDisk();},
           child: Container(
             margin: const EdgeInsets.only(bottom: 10,right: 10,left: 10),
             width: 20,
@@ -192,11 +189,7 @@ class _UserPageState extends State<UserPage> {
           ),
         ),
         GestureDetector(
-          onTap: () {setState(() {
-            customTheme.streamController.add(greenTheme);
-            _streamController.add(greenTheme);
-            colorThemeValue = "greenTheme";
-          });},
+          onTap: () {ThemeProvider.controllerOf(context).setTheme("green");ThemeProvider.controllerOf(context).saveThemeToDisk();},
           child: Container(
             margin: const EdgeInsets.only(bottom: 10,right: 10,left: 10),
             width: 20,
@@ -205,11 +198,7 @@ class _UserPageState extends State<UserPage> {
           ),
         ),
         GestureDetector(
-          onTap: () {setState(() {
-            customTheme.streamController.add(redTheme);
-            _streamController.add(redTheme);
-            colorThemeValue = "redTheme";
-          });},
+          onTap: () {ThemeProvider.controllerOf(context).setTheme("red");ThemeProvider.controllerOf(context).saveThemeToDisk();},
           child: Container(
             margin: const EdgeInsets.only(bottom: 10,right: 10,left: 10),
             width: 20,
@@ -389,7 +378,7 @@ class _UserPageState extends State<UserPage> {
   Widget buildHeader(context) {
     return Column(
       children: [
-        const SizedBox(height: 50),
+        const SizedBox(height: 40),
         Center(
           child: Text("Paramètres Utilisateur",
               style: GoogleFonts.oswald(
@@ -422,19 +411,16 @@ class _UserPageState extends State<UserPage> {
               dbHelperUser!.updateDataUser(UserModel(
                 contrat: contratController.text,
                 pause: pauseController.text,
+                samCheck: samCheck
               ));
             } else {
               dbHelperUser!.insertDataUser(UserModel(
                 contrat: contratController.text,
                 pause: pauseController.text,
+                samCheck: samCheck
               ));
             }
             Navigator.push(context, MaterialPageRoute(builder: (context) => const HomePage()));
-
-            var pref = await SharedPreferences.getInstance();
-            (colorThemeValue == null) ? getDataTheme : pref.setString(keyTheme, colorThemeValue!);
-
-
             contratController.clear();
             pauseController.clear();
             if (kDebugMode) {

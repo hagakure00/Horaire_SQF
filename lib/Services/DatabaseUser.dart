@@ -26,7 +26,8 @@ class DBHelperUser{
   _createDatabaseUser(Database db, int version) async {
     await db.execute( """CREATE TABLE user(
           "contrat" TEXT NOT NULL, 
-          "pause" TEXT NOT NULL
+          "pause" TEXT NOT NULL,
+           "samCheck" TEXT NOT NULL
     )""");
   }
 
@@ -55,6 +56,18 @@ class DBHelperUser{
       return '';
     } else {
       data = query.last["colorTheme"].toString();
+      return data;
+    }
+  }
+
+  Future<String> getSamCheck() async {
+    var dbClient = await db;
+    String data;
+    final query = await dbClient!.rawQuery('SELECT * FROM user');
+    if (query.isEmpty) {
+      return '';
+    } else {
+      data = query.last["samCheck"].toString();
       return data;
     }
   }

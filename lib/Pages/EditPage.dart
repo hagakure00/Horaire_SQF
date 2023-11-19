@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:horaire/Animation/FadeAnimation.dart';
 import 'package:horaire/Models/HoraireModel.dart';
+import 'package:horaire/Services/DatabaseUser.dart';
 import 'package:horaire/Theme/colors.dart';
 import 'package:horaire/Widgets/CustomTextfield.dart';
 import 'package:horaire/Widgets/CustomTextfieldFooter.dart';
@@ -14,12 +15,13 @@ class EditPage extends StatefulWidget {
   final HoraireModel horaire;
 
   @override
-  _EditPageState createState() => _EditPageState();
+  State<EditPage> createState() => _EditPageState();
 }
 
 class _EditPageState extends State<EditPage> {
   final formKey = GlobalKey<FormState>();
   DBHelperHoraire? dbHelper;
+  DBHelperUser? dbHelperUser;
 
   late String moyenneCP;
 
@@ -83,12 +85,20 @@ class _EditPageState extends State<EditPage> {
   late String checkS5j4 = (widget.horaire.cpS5j4 == "1") ? "1" : "0";
   late String checkS5j5 = (widget.horaire.cpS5j5 == "1") ? "1" : "0";
 
+  late String samediCheck = (widget.horaire.samedi == "1") ? "1" : "0";
+  late double samediNum = (samediCheck == "1") ? 1 : 0;
+
+
 
   @override
   void initState() {
     super.initState();
     dbHelper = DBHelperHoraire();
+    dbHelperUser = DBHelperUser();
   }
+
+
+  late final year = TextEditingController(text: widget.horaire.year);
 
   late final cpS1j1 = TextEditingController(text: widget.horaire.cpS1j1);
   late final cpS1j2 = TextEditingController(text: widget.horaire.cpS1j2);
@@ -284,7 +294,7 @@ class _EditPageState extends State<EditPage> {
       s1j6tnum = double.parse(s1d6t.text.isNotEmpty ? s1d6t.text : s1j6tnum.toString());
 
       s1j1tnum = s1j1dnum - s1j1anum - timepause;
-      totals1num = s1j1tnum + s1j2tnum + s1j3tnum + s1j4tnum + s1j5tnum + s1j6tnum;
+      totals1num = s1j1tnum + s1j2tnum + s1j3tnum + s1j4tnum + s1j5tnum + (samediNum == 0 ? s1j6tnum : 0) ;
     });
   }
   additions1j2(dynamic) {
@@ -303,7 +313,7 @@ class _EditPageState extends State<EditPage> {
       s1j6tnum = double.parse(s1d6t.text.isNotEmpty ? s1d6t.text : s1j6tnum.toString());
 
       s1j2tnum = s1j2dnum - s1j2anum - timepause;
-      totals1num = s1j1tnum + s1j2tnum + s1j3tnum + s1j4tnum + s1j5tnum + s1j6tnum;
+      totals1num = s1j1tnum + s1j2tnum + s1j3tnum + s1j4tnum + s1j5tnum + (samediNum == 0 ? s1j6tnum : 0);
     });
   }
   additions1j3(dynamic) {
@@ -322,7 +332,7 @@ class _EditPageState extends State<EditPage> {
       s1j6tnum = double.parse(s1d6t.text.isNotEmpty ? s1d6t.text : s1j6tnum.toString());
 
       s1j3tnum = s1j3dnum - s1j3anum - timepause;
-      totals1num = s1j1tnum + s1j2tnum + s1j3tnum + s1j4tnum + s1j5tnum + s1j6tnum;
+      totals1num = s1j1tnum + s1j2tnum + s1j3tnum + s1j4tnum + s1j5tnum + (samediNum == 0 ? s1j6tnum : 0);
     });
   }
   additions1j4(dynamic) {
@@ -341,7 +351,7 @@ class _EditPageState extends State<EditPage> {
       s1j6tnum = double.parse(s1d6t.text.isNotEmpty ? s1d6t.text : s1j6tnum.toString());
 
       s1j4tnum = s1j4dnum - s1j4anum - timepause;
-      totals1num = s1j1tnum + s1j2tnum + s1j3tnum + s1j4tnum + s1j5tnum + s1j6tnum;
+      totals1num = s1j1tnum + s1j2tnum + s1j3tnum + s1j4tnum + s1j5tnum + (samediNum == 0 ? s1j6tnum : 0);
     });
   }
   additions1j5(dynamic) {
@@ -360,7 +370,7 @@ class _EditPageState extends State<EditPage> {
       s1j6tnum = double.parse(s1d6t.text.isNotEmpty ? s1d6t.text : s1j6tnum.toString());
 
       s1j5tnum = s1j5dnum - s1j5anum - timepause;
-      totals1num = s1j1tnum + s1j2tnum + s1j3tnum + s1j4tnum + s1j5tnum + s1j6tnum;
+      totals1num = s1j1tnum + s1j2tnum + s1j3tnum + s1j4tnum + s1j5tnum + (samediNum == 0 ? s1j6tnum : 0);
     });
   }
   additions1j6(dynamic) {
@@ -379,7 +389,7 @@ class _EditPageState extends State<EditPage> {
       s1j6tnum = double.parse(s1d6t.text.isNotEmpty ? s1d6t.text : s1j6tnum.toString());
 
       s1j6tnum = s1j6dnum - s1j6anum;
-      totals1num = s1j1tnum + s1j2tnum + s1j3tnum + s1j4tnum + s1j5tnum + s1j6tnum;
+      totals1num = s1j1tnum + s1j2tnum + s1j3tnum + s1j4tnum + s1j5tnum + (samediNum == 0 ? s1j6tnum : 0);
     });
   }
   clearResults1(dynamic) {
@@ -391,7 +401,7 @@ class _EditPageState extends State<EditPage> {
       s1j4tnum = double.parse(s1d4t.text.isNotEmpty ? s1d4t.text : s1j4tnum.toString());
       s1j5tnum = double.parse(s1d5t.text.isNotEmpty ? s1d5t.text : s1j5tnum.toString());
       s1j6tnum = double.parse(s1d6t.text.isNotEmpty ? s1d6t.text : s1j6tnum.toString());
-      totals1num = s1j1tnum + s1j2tnum + s1j3tnum + s1j4tnum + s1j5tnum + s1j6tnum;
+      totals1num = s1j1tnum + s1j2tnum + s1j3tnum + s1j4tnum + s1j5tnum + (samediNum == 0 ? s1j6tnum : 0);
     });
   }
 
@@ -412,7 +422,7 @@ class _EditPageState extends State<EditPage> {
       s2j6tnum = double.parse(s2d6t.text.isNotEmpty ? s2d6t.text : s2j6tnum.toString());
 
       s2j1tnum = s2j1dnum - s2j1anum - timepause;
-      totals2num = s2j1tnum + s2j2tnum + s2j3tnum + s2j4tnum + s2j5tnum + s2j6tnum;
+      totals2num = s2j1tnum + s2j2tnum + s2j3tnum + s2j4tnum + s2j5tnum + (samediNum == 0 ? s2j6tnum : 0);
     });
   }
   additions2j2(dynamic) {
@@ -431,7 +441,7 @@ class _EditPageState extends State<EditPage> {
       s2j6tnum = double.parse(s2d6t.text.isNotEmpty ? s2d6t.text : s2j6tnum.toString());
 
       s2j2tnum = s2j2dnum - s2j2anum - timepause;
-      totals2num = s2j1tnum + s2j2tnum + s2j3tnum + s2j4tnum + s2j5tnum + s2j6tnum;
+      totals2num = s2j1tnum + s2j2tnum + s2j3tnum + s2j4tnum + s2j5tnum + (samediNum == 0 ? s2j6tnum : 0);
     });
   }
   additions2j3(dynamic) {
@@ -450,7 +460,7 @@ class _EditPageState extends State<EditPage> {
       s2j6tnum = double.parse(s2d6t.text.isNotEmpty ? s2d6t.text : s2j6tnum.toString());
 
       s2j3tnum = s2j3dnum - s2j3anum - timepause;
-      totals2num = s2j1tnum + s2j2tnum + s2j3tnum + s2j4tnum + s2j5tnum + s2j6tnum;
+      totals2num = s2j1tnum + s2j2tnum + s2j3tnum + s2j4tnum + s2j5tnum + (samediNum == 0 ? s2j6tnum : 0);
     });
   }
   additions2j4(dynamic) {
@@ -469,7 +479,7 @@ class _EditPageState extends State<EditPage> {
       s2j6tnum = double.parse(s2d6t.text.isNotEmpty ? s2d6t.text : s2j6tnum.toString());
 
       s2j4tnum = s2j4dnum - s2j4anum - timepause;
-      totals2num = s2j1tnum + s2j2tnum + s2j3tnum + s2j4tnum + s2j5tnum + s2j6tnum;
+      totals2num = s2j1tnum + s2j2tnum + s2j3tnum + s2j4tnum + s2j5tnum + (samediNum == 0 ? s2j6tnum : 0);
     });
   }
   additions2j5(dynamic) {
@@ -488,7 +498,7 @@ class _EditPageState extends State<EditPage> {
       s2j6tnum = double.parse(s2d6t.text.isNotEmpty ? s2d6t.text : s2j6tnum.toString());
 
       s2j5tnum = s2j5dnum - s2j5anum - timepause;
-      totals2num = s2j1tnum + s2j2tnum + s2j3tnum + s2j4tnum + s2j5tnum + s2j6tnum;
+      totals2num = s2j1tnum + s2j2tnum + s2j3tnum + s2j4tnum + s2j5tnum + (samediNum == 0 ? s2j6tnum : 0);
     });
   }
   additions2j6(dynamic) {
@@ -507,7 +517,7 @@ class _EditPageState extends State<EditPage> {
       s2j6tnum = double.parse(s2d6t.text.isNotEmpty ? s2d6t.text : s2j6tnum.toString());
 
       s2j6tnum = s2j6dnum - s2j6anum;
-      totals2num = s2j1tnum + s2j2tnum + s2j3tnum + s2j4tnum + s2j5tnum + s2j6tnum;
+      totals2num = s2j1tnum + s2j2tnum + s2j3tnum + s2j4tnum + s2j5tnum + (samediNum == 0 ? s2j6tnum : 0);
     });
   }
   clearResults2(dynamic) {
@@ -519,7 +529,7 @@ class _EditPageState extends State<EditPage> {
       s2j4tnum = double.parse(s2d4t.text.isNotEmpty ? s2d4t.text : s2j4tnum.toString());
       s2j5tnum = double.parse(s2d5t.text.isNotEmpty ? s2d5t.text : s2j5tnum.toString());
       s2j6tnum = double.parse(s2d6t.text.isNotEmpty ? s2d6t.text : s2j6tnum.toString());
-      totals2num = s2j1tnum + s2j2tnum + s2j3tnum + s2j4tnum + s2j5tnum + s2j6tnum;
+      totals2num = s2j1tnum + s2j2tnum + s2j3tnum + s2j4tnum + s2j5tnum + (samediNum == 0 ? s2j6tnum : 0);
     });
   }
 
@@ -539,7 +549,7 @@ class _EditPageState extends State<EditPage> {
       s3j6tnum = double.parse(s3d6t.text.isNotEmpty ? s3d6t.text : s3j6tnum.toString());
 
       s3j1tnum = s3j1dnum - s3j1anum - timepause;
-      totals3num = s3j1tnum + s3j2tnum + s3j3tnum + s3j4tnum + s3j5tnum + s3j6tnum;
+      totals3num = s3j1tnum + s3j2tnum + s3j3tnum + s3j4tnum + s3j5tnum + (samediNum == 0 ? s3j6tnum : 0);
     });
   }
   additions3j2(dynamic) {
@@ -558,7 +568,7 @@ class _EditPageState extends State<EditPage> {
       s3j6tnum = double.parse(s3d6t.text.isNotEmpty ? s3d6t.text : s3j6tnum.toString());
 
       s3j2tnum = s3j2dnum - s3j2anum - timepause;
-      totals3num = s3j1tnum + s3j2tnum + s3j3tnum + s3j4tnum + s3j5tnum + s3j6tnum;
+      totals3num = s3j1tnum + s3j2tnum + s3j3tnum + s3j4tnum + s3j5tnum + (samediNum == 0 ? s3j6tnum : 0);
     });
   }
   additions3j3(dynamic) {
@@ -577,7 +587,7 @@ class _EditPageState extends State<EditPage> {
       s3j6tnum = double.parse(s3d6t.text.isNotEmpty ? s3d6t.text : s3j6tnum.toString());
 
       s3j3tnum = s3j3dnum - s3j3anum - timepause;
-      totals3num = s3j1tnum + s3j2tnum + s3j3tnum + s3j4tnum + s3j5tnum + s3j6tnum;
+      totals3num = s3j1tnum + s3j2tnum + s3j3tnum + s3j4tnum + s3j5tnum + (samediNum == 0 ? s3j6tnum : 0);
     });
   }
   additions3j4(dynamic) {
@@ -596,7 +606,7 @@ class _EditPageState extends State<EditPage> {
       s3j6tnum = double.parse(s3d6t.text.isNotEmpty ? s3d6t.text : s3j6tnum.toString());
 
       s3j4tnum = s3j4dnum - s3j4anum - timepause;
-      totals3num = s3j1tnum + s3j2tnum + s3j3tnum + s3j4tnum + s3j5tnum + s3j6tnum;
+      totals3num = s3j1tnum + s3j2tnum + s3j3tnum + s3j4tnum + s3j5tnum + (samediNum == 0 ? s3j6tnum : 0);
     });
   }
   additions3j5(dynamic) {
@@ -615,7 +625,7 @@ class _EditPageState extends State<EditPage> {
       s3j6tnum = double.parse(s3d6t.text.isNotEmpty ? s3d6t.text : s3j6tnum.toString());
 
       s3j5tnum = s3j5dnum - s3j5anum - timepause;
-      totals3num = s3j1tnum + s3j2tnum + s3j3tnum + s3j4tnum + s3j5tnum + s3j6tnum;
+      totals3num = s3j1tnum + s3j2tnum + s3j3tnum + s3j4tnum + s3j5tnum + (samediNum == 0 ? s3j6tnum : 0);
     });
   }
   additions3j6(dynamic) {
@@ -634,7 +644,7 @@ class _EditPageState extends State<EditPage> {
       s3j6tnum = double.parse(s3d6t.text.isNotEmpty ? s3d6t.text : s3j6tnum.toString());
 
       s3j6tnum = s3j6dnum - s3j6anum;
-      totals3num = s3j1tnum + s3j2tnum + s3j3tnum + s3j4tnum + s3j5tnum + s3j6tnum;
+      totals3num = s3j1tnum + s3j2tnum + s3j3tnum + s3j4tnum + s3j5tnum + (samediNum == 0 ? s3j6tnum : 0);
     });
   }
   clearResults3(dynamic) {
@@ -646,7 +656,7 @@ class _EditPageState extends State<EditPage> {
       s3j4tnum = double.parse(s3d4t.text.isNotEmpty ? s3d4t.text : s3j4tnum.toString());
       s3j5tnum = double.parse(s3d5t.text.isNotEmpty ? s3d5t.text : s3j5tnum.toString());
       s3j6tnum = double.parse(s3d6t.text.isNotEmpty ? s3d6t.text : s3j6tnum.toString());
-      totals3num = s3j1tnum + s3j2tnum + s3j3tnum + s3j4tnum + s3j5tnum + s3j6tnum;
+      totals3num = s3j1tnum + s3j2tnum + s3j3tnum + s3j4tnum + s3j5tnum + (samediNum == 0 ? s3j6tnum : 0);
     });
   }
 
@@ -666,7 +676,7 @@ class _EditPageState extends State<EditPage> {
       s4j6tnum = double.parse(s4d6t.text.isNotEmpty ? s4d6t.text : s4j6tnum.toString());
 
       s4j1tnum = s4j1dnum - s4j1anum - timepause;
-      totals4num = s4j1tnum + s4j2tnum + s4j3tnum + s4j4tnum + s4j5tnum + s4j6tnum;
+      totals4num = s4j1tnum + s4j2tnum + s4j3tnum + s4j4tnum + s4j5tnum + (samediNum == 0 ? s4j6tnum : 0);
     });
   }
   additions4j2(dynamic) {
@@ -685,7 +695,7 @@ class _EditPageState extends State<EditPage> {
       s4j6tnum = double.parse(s4d6t.text.isNotEmpty ? s4d6t.text : s4j6tnum.toString());
 
       s4j2tnum = s4j2dnum - s4j2anum - timepause;
-      totals4num = s4j1tnum + s4j2tnum + s4j3tnum + s4j4tnum + s4j5tnum + s4j6tnum;
+      totals4num = s4j1tnum + s4j2tnum + s4j3tnum + s4j4tnum + s4j5tnum + (samediNum == 0 ? s4j6tnum : 0);
     });
   }
   additions4j3(dynamic) {
@@ -704,7 +714,7 @@ class _EditPageState extends State<EditPage> {
       s4j6tnum = double.parse(s4d6t.text.isNotEmpty ? s4d6t.text : s4j6tnum.toString());
 
       s4j3tnum = s4j3dnum - s4j3anum - timepause;
-      totals4num = s4j1tnum + s4j2tnum + s4j3tnum + s4j4tnum + s4j5tnum + s4j6tnum;
+      totals4num = s4j1tnum + s4j2tnum + s4j3tnum + s4j4tnum + s4j5tnum + (samediNum == 0 ? s4j6tnum : 0);
     });
   }
   additions4j4(dynamic) {
@@ -723,7 +733,7 @@ class _EditPageState extends State<EditPage> {
       s4j6tnum = double.parse(s4d6t.text.isNotEmpty ? s4d6t.text : s4j6tnum.toString());
 
       s4j4tnum = s4j4dnum - s4j4anum - timepause;
-      totals4num = s4j1tnum + s4j2tnum + s4j3tnum + s4j4tnum + s4j5tnum + s4j6tnum;
+      totals4num = s4j1tnum + s4j2tnum + s4j3tnum + s4j4tnum + s4j5tnum + (samediNum == 0 ? s4j6tnum : 0);
     });
   }
   additions4j5(dynamic) {
@@ -742,7 +752,7 @@ class _EditPageState extends State<EditPage> {
       s4j6tnum = double.parse(s4d6t.text.isNotEmpty ? s4d6t.text : s4j6tnum.toString());
 
       s4j5tnum = s4j5dnum - s4j5anum - timepause;
-      totals4num = s4j1tnum + s4j2tnum + s4j3tnum + s4j4tnum + s4j5tnum + s4j6tnum;
+      totals4num = s4j1tnum + s4j2tnum + s4j3tnum + s4j4tnum + s4j5tnum + (samediNum == 0 ? s4j6tnum : 0);
     });
   }
   additions4j6(dynamic) {
@@ -761,7 +771,7 @@ class _EditPageState extends State<EditPage> {
       s4j6tnum = double.parse(s4d6t.text.isNotEmpty ? s4d6t.text : s4j6tnum.toString());
 
       s4j6tnum = s4j6dnum - s4j6anum;
-      totals4num = s4j1tnum + s4j2tnum + s4j3tnum + s4j4tnum + s4j5tnum + s4j6tnum;
+      totals4num = s4j1tnum + s4j2tnum + s4j3tnum + s4j4tnum + s4j5tnum + (samediNum == 0 ? s4j6tnum : 0);
     });
   }
   clearResults4(dynamic) {
@@ -773,7 +783,7 @@ class _EditPageState extends State<EditPage> {
       s4j4tnum = double.parse(s4d4t.text.isNotEmpty ? s4d4t.text : s4j4tnum.toString());
       s4j5tnum = double.parse(s4d5t.text.isNotEmpty ? s4d5t.text : s4j5tnum.toString());
       s4j6tnum = double.parse(s4d6t.text.isNotEmpty ? s4d6t.text : s4j6tnum.toString());
-      totals4num = s4j1tnum + s4j2tnum + s4j3tnum + s4j4tnum + s4j5tnum + s4j6tnum;
+      totals4num = s4j1tnum + s4j2tnum + s4j3tnum + s4j4tnum + s4j5tnum + (samediNum == 0 ? s4j6tnum : 0);
     });
   }
 
@@ -793,7 +803,7 @@ class _EditPageState extends State<EditPage> {
       s5j6tnum = double.parse(s5d6t.text.isNotEmpty ? s5d6t.text : s5j6tnum.toString());
 
       s5j1tnum = s5j1dnum - s5j1anum - timepause;
-      totals5num = s5j1tnum + s5j2tnum + s5j3tnum + s5j4tnum + s5j5tnum + s5j6tnum;
+      totals5num = s5j1tnum + s5j2tnum + s5j3tnum + s5j4tnum + s5j5tnum + (samediNum == 0 ? s5j6tnum : 0);
     });
   }
   additions5j2(dynamic) {
@@ -812,7 +822,7 @@ class _EditPageState extends State<EditPage> {
       s5j6tnum = double.parse(s5d6t.text.isNotEmpty ? s5d6t.text : s5j6tnum.toString());
 
       s5j2tnum = s5j2dnum - s5j2anum - timepause;
-      totals5num = s5j1tnum + s5j2tnum + s5j3tnum + s5j4tnum + s5j5tnum + s5j6tnum;
+      totals5num = s5j1tnum + s5j2tnum + s5j3tnum + s5j4tnum + s5j5tnum + (samediNum == 0 ? s5j6tnum : 0);
     });
   }
   additions5j3(dynamic) {
@@ -831,7 +841,7 @@ class _EditPageState extends State<EditPage> {
       s5j6tnum = double.parse(s5d6t.text.isNotEmpty ? s5d6t.text : s5j6tnum.toString());
 
       s5j3tnum = s5j3dnum - s5j3anum - timepause;
-      totals5num = s5j1tnum + s5j2tnum + s5j3tnum + s5j4tnum + s5j5tnum + s5j6tnum;
+      totals5num = s5j1tnum + s5j2tnum + s5j3tnum + s5j4tnum + s5j5tnum + (samediNum == 0 ? s5j6tnum : 0);
     });
   }
   additions5j4(dynamic) {
@@ -850,7 +860,7 @@ class _EditPageState extends State<EditPage> {
       s5j6tnum = double.parse(s5d6t.text.isNotEmpty ? s5d6t.text : s5j6tnum.toString());
 
       s5j4tnum = s5j4dnum - s5j4anum - timepause;
-      totals5num = s5j1tnum + s5j2tnum + s5j3tnum + s5j4tnum + s5j5tnum + s5j6tnum;
+      totals5num = s5j1tnum + s5j2tnum + s5j3tnum + s5j4tnum + s5j5tnum + (samediNum == 0 ? s5j6tnum : 0);
     });
   }
   additions5j5(dynamic) {
@@ -869,7 +879,7 @@ class _EditPageState extends State<EditPage> {
       s5j6tnum = double.parse(s5d6t.text.isNotEmpty ? s5d6t.text : s5j6tnum.toString());
 
       s5j5tnum = s5j5dnum - s5j5anum - timepause;
-      totals5num = s5j1tnum + s5j2tnum + s5j3tnum + s5j4tnum + s5j5tnum + s5j6tnum;
+      totals5num = s5j1tnum + s5j2tnum + s5j3tnum + s5j4tnum + s5j5tnum + (samediNum == 0 ? s5j6tnum : 0);
     });
   }
   additions5j6(dynamic) {
@@ -888,7 +898,7 @@ class _EditPageState extends State<EditPage> {
       s5j6tnum = double.parse(s5d6t.text.isNotEmpty ? s5d6t.text : s5j6tnum.toString());
 
       s5j6tnum = s5j6dnum - s5j6anum;
-      totals5num = s5j1tnum + s5j2tnum + s5j3tnum + s5j4tnum + s5j5tnum + s5j6tnum;
+      totals5num = s5j1tnum + s5j2tnum + s5j3tnum + s5j4tnum + s5j5tnum + (samediNum == 0 ? s5j6tnum : 0);
     });
   }
   clearResults5(dynamic) {
@@ -900,7 +910,7 @@ class _EditPageState extends State<EditPage> {
       s5j4tnum = double.parse(s5d4t.text.isNotEmpty ? s5d4t.text : s5j4tnum.toString());
       s5j5tnum = double.parse(s5d5t.text.isNotEmpty ? s5d5t.text : s5j5tnum.toString());
       s5j6tnum = double.parse(s5d6t.text.isNotEmpty ? s5d6t.text : s5j6tnum.toString());
-      totals5num = s5j1tnum + s5j2tnum + s5j3tnum + s5j4tnum + s5j5tnum + s5j6tnum;
+      totals5num = s5j1tnum + s5j2tnum + s5j3tnum + s5j4tnum + s5j5tnum + (samediNum == 0 ? s5j6tnum : 0);
     });
   }
 
@@ -1153,6 +1163,9 @@ class _EditPageState extends State<EditPage> {
               cpS5j3: checkS5j3,
               cpS5j4: checkS5j4,
               cpS5j5: checkS5j5,
+
+              year: DateTime.now().year.toString(),
+              samedi: samediCheck
             ));
             Navigator.of(context).push(MaterialPageRoute(builder: (context) => const HomePage()));
 

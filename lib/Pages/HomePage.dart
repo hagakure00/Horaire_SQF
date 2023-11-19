@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -19,7 +18,7 @@ class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
   @override
-  _HomePageState createState() => _HomePageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
@@ -72,7 +71,7 @@ class _HomePageState extends State<HomePage> {
               if (!snapshot.hasData || snapshot.data == null || snapshot.data!.isEmpty){
                 return IconButton(
                       onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => const UserPage(isUpdate: false,pause:null,contrat: null)));
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => const UserPage(isUpdate: false,pause:null,contrat: null,samedi: "0",)));
                     },
                     icon: const Icon(Icons.settings, color: grey, size: 20));
               }
@@ -86,7 +85,7 @@ class _HomePageState extends State<HomePage> {
                         var value = snapshot.data![index];
                         return IconButton(
                             onPressed: () {
-                              Navigator.of(context).push(MaterialPageRoute(builder: (context) => UserPage(isUpdate: true,pause: value.pause,contrat: value.contrat)));
+                              Navigator.of(context).push(MaterialPageRoute(builder: (context) => UserPage(isUpdate: true,pause: value.pause,contrat: value.contrat, samedi: value.samCheck)));
                             },
                             icon: const Icon(Icons.settings, color: grey, size: 20));
                       }
@@ -144,7 +143,6 @@ class _HomePageState extends State<HomePage> {
                   ),
                   SizedBox(
                     height: 90,
-                    // color: grey.withOpacity(0.6),
                     child: Padding(
                         padding: const EdgeInsets.only(left: 20),
                         child: FutureBuilder(
@@ -166,7 +164,7 @@ class _HomePageState extends State<HomePage> {
                                   );
                                   Timer(const Duration(milliseconds: 150), () {
                                     setState(() {
-                                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => const UserPage(isUpdate: false, pause: null, contrat: null)));
+                                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => const UserPage(isUpdate: false, pause: null, contrat: null,samedi: '0')));
                                     });
                                   });
                                 },
@@ -185,8 +183,7 @@ class _HomePageState extends State<HomePage> {
                                       ),
                                     ],
                                   ),
-                                  child:
-                                  const Icon(Ionicons.add, color: white, size: 20),
+                                  child: const Icon(Ionicons.add, color: white, size: 20),
                                 ),
                               );
                             }
@@ -200,7 +197,7 @@ class _HomePageState extends State<HomePage> {
                                       var value = snapshot.data![index];
                                       return GestureDetector(
                                         onTap: () {
-                                          Navigator.of(context).push(MaterialPageRoute(builder: (context) => AddPage(valuePause: value.pause,valueContrat: value.contrat)));
+                                          Navigator.of(context).push(MaterialPageRoute(builder: (context) => AddPage(valuePause: value.pause,valueContrat: value.contrat,samedi: value.samCheck)));
                                         },
                                         child: Container(
                                           height: 50,

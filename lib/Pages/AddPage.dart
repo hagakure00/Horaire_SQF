@@ -11,13 +11,14 @@ import '../Services/DatabaseHoraire.dart';
 import '../Services/DatabaseUser.dart';
 
 class AddPage extends StatefulWidget {
-  const AddPage({Key? key, required this.valuePause, required this.valueContrat}) : super(key: key);
+  const AddPage({Key? key, required this.valuePause, required this.valueContrat, required this.samedi}) : super(key: key);
 
   final String? valuePause;
   final String? valueContrat;
+  final String? samedi;
 
   @override
-  _AddPageState createState() => _AddPageState();
+  State<AddPage> createState() => _AddPageState();
 }
 
 class _AddPageState extends State<AddPage> {
@@ -27,6 +28,7 @@ class _AddPageState extends State<AddPage> {
   DBHelperUser? dbHelperUser;
   Database? db;
 
+  late final samediController = TextEditingController(text: widget.samedi);
   late final contratController = TextEditingController(text: widget.valueContrat);
   late final pauseController = TextEditingController(text: widget.valuePause);
   late final moisController = TextEditingController(text: "");
@@ -270,6 +272,7 @@ getModule() {
                   date: DateFormat('yMd').add_jm().format(DateTime.now()).toString(),
                   contratHoraire: contratController.text,
                   tempsPause: pauseController.text,
+                  samedi: samediController.text,
                   module: moduleController.text,
 
                 s1d1a: "",
@@ -405,6 +408,8 @@ getModule() {
                 cpS5j3: "0",
                 cpS5j4: "0",
                 cpS5j5: "0",
+
+                year: DateTime.now().year.toString(),
 
               ));
             Navigator.push(context, MaterialPageRoute(builder: (context)=> const HomePage()));
